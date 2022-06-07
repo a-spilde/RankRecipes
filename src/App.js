@@ -48,6 +48,7 @@ function App() {
   const [fiveChecked, setFiveChecked] = useState(false);
 
   useEffect(() => {
+    document.title = "RankRecipes"
     // USING MYSQL ------------------------
     // Axios.get("http://localhost:3001/api/get").then((response) => {
     //   setRecipeList(response.data);
