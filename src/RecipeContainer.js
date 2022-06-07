@@ -1,10 +1,6 @@
 import React from "react";
-import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import Accordion from "react-bootstrap/Accordion";
-import Container from "react-bootstrap/Container";
-import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Recipe from "./Recipe";
 
@@ -36,8 +32,7 @@ class RecipeContainer extends React.Component {
           sauceRank={this.props.recipes[i].SauceRating}
           note={this.props.recipes[i].Notes}
           source={this.props.recipes[i].Source}
-          id={this.props.recipes[i].i}
-          // id={this.props.recipes[i].id}
+          id={this.props.recipes[i].id}
           delete={(data) => this.callDelete(data)}
           edit={(data) => this.callEdit(data)}
         />
@@ -62,7 +57,6 @@ class RecipeContainer extends React.Component {
       this.state.addRating === -1 ||
       this.state.addCost === "-1"
     ) {
-      console.log("NEED MORE INFO");
     } else {
       let toAdd = [];
 
@@ -86,7 +80,6 @@ class RecipeContainer extends React.Component {
   }
 
   callDelete(rid) {
-    console.log("RID11: " + rid);
     this.props.delete(rid);
   }
 
@@ -185,17 +178,6 @@ class RecipeContainer extends React.Component {
                 <option value="100" label="0"></option>
               </datalist>
             </Row>
-
-            {/* <Row id="input_row">
-              Sauce Rating
-              <input
-                type="decimal"
-                id="addInput"
-                onChange={(e) => {
-                  this.setState({ addSauceRating: e.target.value });
-                }}
-              />
-            </Row> */}
 
             <Row id="input_row">
               Sauce Rating

@@ -1,0 +1,3 @@
+To redeploy:
+npm run build
+firebase deploy

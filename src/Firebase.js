@@ -4,7 +4,7 @@ import {getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth'
 import {getFirestore} from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD4thh7Y3tgG760HNRbm7gCnlViiXQL7p4",
+  apiKey: process.env.REACT_APP_UNSPLASH_KEY,
   authDomain: "recipe-ranker-589de.firebaseapp.com",
   projectId: "recipe-ranker-589de",
   storageBucket: "recipe-ranker-589de.appspot.com",

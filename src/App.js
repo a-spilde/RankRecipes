@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import Axios from "axios";
 import RecipeContainer from "./RecipeContainer";
-import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import Accordion from "react-bootstrap/Accordion";
-import Container from "react-bootstrap/Container";
-import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { signInWithGoogle, db } from "./Firebase";
-import firebase from "firebase/app";
-// import "firebase/firestore";
+
+
 
 import {
   collection,
@@ -27,7 +22,6 @@ import {
   orderBy,
   limit,
 } from "firebase/firestore";
-import { async } from "@firebase/util";
 
 function App() {
   const [newReview, setNewReview] = useState("");
@@ -54,17 +48,12 @@ function App() {
   const [fiveChecked, setFiveChecked] = useState(false);
 
   useEffect(() => {
-    console.log("USER EFFECT CALLED");
-    console.log(db);
-    console.log("DB^^^^");
     // USING MYSQL ------------------------
     // Axios.get("http://localhost:3001/api/get").then((response) => {
     //   setRecipeList(response.data);
     // });
 
     const getRecipes = async () => {
-      console.log(currUser);
-      console.log(localStorage.getItem("userId"));
       let q = query(
         recipesReference,
         where("UserID", "==", localStorage.getItem("userId")),
@@ -73,8 +62,6 @@ function App() {
       // let r = query(recipesReference,orderBy("Rating", "desc"))
       const data = await getDocs(q);
 
-      // const data = await getDocs(recipesReference);
-      console.log(data);
       setRecipeList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
 
@@ -85,7 +72,6 @@ function App() {
 
     setCurrUser(localStorage.getItem("userId"));
     setUserName(localStorage.getItem("name"));
-    console.log("setting userId to " + localStorage.getItem("userId"));
     getUsers();
     getRecipes();
   }, []);
@@ -126,9 +112,6 @@ function App() {
       id: fullDoc.id,
     };
 
-    console.log("toAdd");
-    console.log(toAdd);
-
     let firstHalf = temp.filter((e) => {
       return e.Rating >= Number(data[2]);
     });
@@ -137,39 +120,17 @@ function App() {
       return e.Rating < Number(data[2]);
     });
 
-    console.log("firstHalf");
     firstHalf.push(toAdd);
 
     for (let i = 0; i < secondHalf.length; i++) {
       firstHalf.push(secondHalf[i]);
-      console.log(firstHalf);
     }
 
-    console.log(firstHalf);
-
-    // for (let i = 0; i < temp.length; i++) {
-    //   if (temp[i].Rating <= data[2]) {
-
-    //     temp.splice(i, 0, toAdd);
-    //   }
-    // }
-
-    // setRecipeList([...temp]);
 
     setRecipeList([
       ...firstHalf,
-      // {
-      //   UserID: currUser,
-      //   Name: data[0],
-      //   Category: data[1],
-      //   Rating: data[2],
-      //   SauceRating: data[3],
-      //   Cost: data[4],
-      //   Source: data[5],
-      //   Notes: data[6],
-      // },
     ]);
-    // window.location.href = window.location.href;
+
   };
 
   async function deleteRecipe(rid) {
@@ -178,13 +139,10 @@ function App() {
 
     // Axios.delete("http://localhost:3001/api/delete/" + rid);
 
-    console.log("RID: " + rid);
-
     const userDoc = doc(db, "Recipes", rid);
     await deleteDoc(userDoc);
 
     for (let i = 0; i < temp.length; i++) {
-      // if (temp[i].ID == rid) {
       if (temp[i].id == rid) {
         temp.splice(i, 1);
         break;
@@ -236,24 +194,10 @@ function App() {
         temp[i].Source = source;
         temp[i].Notes = notes;
         toAdd = temp[i];
-        console.log("setting toAdd to:");
-        console.log(toAdd);
         temp.splice(i, 1);
         break;
       }
     }
-    // let toAdd = {
-    //   Name: name,
-    //   Category: category,
-    //   Rating: Number(rating),
-    //   SauceRating: Number(sauceRating),
-    //   Cost: cost,
-    //   Source: source,
-    //   Notes: notes,
-    // };
-
-    console.log("toAdd");
-    console.log(toAdd);
 
     let firstHalf = temp.filter((e) => {
       return e.Rating >= Number(rating);
@@ -263,24 +207,18 @@ function App() {
       return e.Rating < Number(rating);
     });
 
-    console.log("firstHalf");
     firstHalf.push(toAdd);
 
     for (let i = 0; i < secondHalf.length; i++) {
       firstHalf.push(secondHalf[i]);
-      console.log(firstHalf);
     }
-
-    console.log(firstHalf);
 
     setRecipeList([...firstHalf]);
 
     setShow(false);
-    // window.location.href = window.location.href;
   }
 
   function checkChecked(data) {
-    console.log("Checking if " + data + " = " + cost);
     if (data == cost) {
       return true;
     } else {
@@ -337,28 +275,15 @@ function App() {
   }
 
   async function signIn() {
-    console.log("signIn() called");
     await signInWithGoogle();
 
     if (localStorage.getItem("email")) {
-      console.log("email is not null");
-      console.log("about to check if the email given is already in userList");
       var result = userList.find((obj) => {
-        console.log(obj);
-        console.log(
-          "checking " + obj.Email + " against " + localStorage.getItem("email")
-        );
         return obj.Email === localStorage.getItem("email");
       });
 
       //found user already in db that has that email
       if (result != undefined) {
-        console.log(
-          "found that " +
-            localStorage.getItem("email") +
-            " is already in userList, setting currUser to " +
-            result.id
-        );
         setCurrUser(result.id);
         setUserName(localStorage.getItem("name"));
         localStorage.setItem("userId", result.id);
@@ -374,10 +299,6 @@ function App() {
           newId = docRef.id;
         });
 
-        console.log(
-          "email was not found in userList, adding it with a generated id of " +
-            newId
-        );
         setCurrUser(newId);
         setUserName(localStorage.getItem("name"));
         localStorage.setItem("userId", newId);
@@ -410,8 +331,6 @@ function App() {
       </Button>
 
       {logOutButton()}
-
-      {/* {userName} */}
 
       <RecipeContainer
         add={(data) => addRecipe(data)}
@@ -456,14 +375,6 @@ function App() {
               Rating <span id="red_star">*</span>{" "}
             </p>
             <Row id="center_rating">{rating}</Row>
-            {/* <input
-              type="decimal"
-              id="addInput"
-              value=
-              onChange={(e) => {
-                setRating(e.target.value);
-              }}
-            /> */}
             <input
               type="range"
               list="tickmarks"
@@ -523,15 +434,6 @@ function App() {
             <p id="modal_label">
               Cost <span id="red_star">*</span>{" "}
             </p>
-            {/* <p>This is a <span class="red_star">red</span> word in a sentence</p> */}
-            {/* <input
-              type="text"
-              id="addInput"
-              value={cost}
-              onChange={(e) => {
-                setCost(e.target.value);
-              }}
-            /> */}
             <div id="costChoice">
               <input
                 type="radio"

@@ -1,15 +1,8 @@
 import React, { createRef, useRef } from "react";
-import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import Accordion from "react-bootstrap/Accordion";
 import Container from "react-bootstrap/Container";
-import Tooltip from "react-bootstrap/Tooltip";
-import Overlay from "react-bootstrap/Overlay";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import Toast from "react-bootstrap/Toast";
-import Dropdown from "react-bootstrap/Dropdown";
 
 class Recipe extends React.Component {
   constructor(props) {
@@ -25,7 +18,6 @@ class Recipe extends React.Component {
   }
 
   delete() {
-    console.log("RID11234324: " + this.props.id);
     this.props.delete(this.props.id);
   }
 
@@ -248,7 +240,6 @@ class Recipe extends React.Component {
       <Container id="recipe_card">
         <Row>
           <Col id="recipe_name_category">
-            {/* <Row id="recipe_name"><a id="recipe_link" target="_blank" href={this.props.source}>{this.props.name}</a></Row> */}
             {this.showName()}
             {this.showSource()}
             <Row id="recipe_category">
@@ -261,17 +252,6 @@ class Recipe extends React.Component {
             
           </Col>
           <Col id="note_section">
-            {/* <Row>
-              {" "}
-              <Button
-                id="recipe_edit"
-                variant="outline-dark"
-                onClick={() => this.toggleNotes()}
-              >
-                Notes
-              </Button>
-            </Row>
-            <Row>{this.showNoteText()}</Row> */}
             {this.props.note}
           </Col>
         </Row>
